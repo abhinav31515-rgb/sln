@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AURUM — Luxury Unisex Salon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ===================== TOKENS ===================== */
+:root{
+  --gold:#C8A85D;--gold-light:#E2D7C1;--bg:#1A1A1A;--surface:#242424;
+  --surface-alt:#2A2A2A;--text:#F9F8F6;--muted:#8C8C8C;--error:#D45D5D;
+  --success:#6FCF97;--glass:rgba(26,26,26,0.72);--border:rgba(249,248,246,0.08);
+  --shadow:0 24px 48px rgba(0,0,0,.5);--radius-sm:2px;--radius-md:8px;--radius-lg:16px;
+  --transition:.4s cubic-bezier(.25,.46,.45,.94);
+}
+/* ===================== RESET ===================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:'Jost',sans-serif;line-height:1.6;overflow-x:hidden;min-height:100vh}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+ul{list-style:none}
+
+/* ===================== TYPOGRAPHY ===================== */
+.h1,.h2,.h3,.h4{font-family:'Cormorant Garamond',serif;font-weight:300;line-height:1.1;letter-spacing:-.01em}
+.h1{font-size:clamp(2.8rem,8vw,5rem)}
+.h2{font-size:clamp(2rem,5vw,3.5rem)}
+.h3{font-size:clamp(1.4rem,3vw,2rem)}
+.h4{font-size:1.2rem}
+.ui-label{font-size:13px;letter-spacing:.15em;text-transform:uppercase;font-weight:400}
+.gold{color:var(--gold)}
+.muted{color:var(--muted)}
+
+/* ===================== LAYOUT ===================== */
+.container{max-width:1280px;margin:0 auto;padding:0 1.5rem}
+.section{padding:5rem 0}
+@media(min-width:768px){.section{padding:7rem 0}}
+.grid-2{display:grid;grid-template-columns:1fr;gap:2rem}
+.grid-3{display:grid;grid-template-columns:1fr;gap:1.5rem}
+.grid-4{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+@media(min-width:640px){.grid-3{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:768px){.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1024px){.grid-4{grid-template-columns:repeat(4,1fr)}}
+
+/* ===================== GLASS CARD ===================== */
+.glass{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius-lg)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:transform var(--transition),box-shadow var(--transition)}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+
+/* ===================== BUTTONS ===================== */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 2rem;border-radius:var(--radius-sm);font-size:13px;letter-spacing:.15em;text-transform:uppercase;font-weight:400;transition:all var(--transition);position:relative;overflow:hidden}
+.btn::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.07);opacity:0;transition:opacity .2s}
+.btn:hover::before{opacity:1}
+.btn-primary{background:var(--gold);color:var(--bg)}
+.btn-primary:hover{background:#d4b46b;box-shadow:0 8px 24px rgba(200,168,93,.3)}
+.btn-outline{border:1px solid var(--gold);color:var(--gold)}
+.btn-outline:hover{background:rgba(200,168,93,.08)}
+.btn-ghost{color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--gold-light)}
+.btn-icon{padding:.65rem;border-radius:var(--radius-sm)}
+
+/* ===================== BADGE ===================== */
+.badge{display:inline-block;padding:.25rem .75rem;border-radius:var(--radius-sm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.badge-gold{background:rgba(200,168,93,.15);color:var(--gold);border:1px solid rgba(200,168,93,.2)}
+.badge-success{background:rgba(111,207,151,.1);color:var(--success)}
+.badge-error{background:rgba(212,93,93,.1);color:var(--error)}
+
+/* ===================== DIVIDER ===================== */
+.divider{display:flex;align-items:center;gap:1rem;margin:1.5rem 0}
+.divider span{height:1px;flex:1;background:var(--border)}
+.divider i{color:var(--gold);font-size:.6rem}
+
+/* ========================================================
+   HEADER / NAV
+======================================================== */
+#header{position:fixed;top:0;left:0;right:0;z-index:900;padding:1.25rem 0;transition:background .5s,backdrop-filter .5s,box-shadow .5s}
+#header.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 4px 32px rgba(0,0,0,.4)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;letter-spacing:.25em;text-transform:uppercase}
+.logo span{color:var(--gold)}
+.nav-links{display:none;align-items:center;gap:2rem}
+@media(min-width:1024px){.nav-links{display:flex}}
+.nav-link{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .2s;position:relative}
+.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+.nav-link:hover{color:var(--text)}
+.nav-link:hover::after{width:100%}
+.nav-actions{display:flex;align-items:center;gap:.75rem}
+.hamburger{display:flex;flex-direction:column;gap:5px;width:24px;padding:.5rem;cursor:pointer}
+@media(min-width:1024px){.hamburger{display:none}}
+.hamburger span{height:1px;background:var(--text);transition:transform .3s,opacity .3s}
+
+/* ===================== MOBILE DRAWER ===================== */
+#drawer{position:fixed;inset:0;z-index:1000;pointer-events:none}
+#drawer-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .3s}
+#drawer-panel{position:absolute;top:0;right:0;width:min(340px,90vw);height:100%;background:var(--surface);padding:2rem 1.5rem;transform:translateX(100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94);overflow-y:auto;display:flex;flex-direction:column;gap:2rem}
+#drawer.open{pointer-events:all}
+#drawer.open #drawer-overlay{opacity:1}
+#drawer.open #drawer-panel{transform:translateX(0)}
+.drawer-header{display:flex;justify-content:space-between;align-items:center}
+.drawer-nav{display:flex;flex-direction:column;gap:.25rem}
+.drawer-link{padding:.875rem 1rem;font-size:15px;letter-spacing:.06em;border-radius:var(--radius-md);transition:background .2s,color .2s;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.drawer-link:hover{background:var(--surface-alt);color:var(--gold)}
+.drawer-sub{display:none;flex-direction:column;background:var(--bg);border-radius:var(--radius-md);margin-top:.25rem;overflow:hidden}
+.drawer-sub a{padding:.625rem 1.5rem;font-size:13px;color:var(--muted);transition:color .2s}
+.drawer-sub a:hover{color:var(--gold)}
+.drawer-sub.open{display:flex}
+
+/* ========================================================
+   BOTTOM NAV (mobile)
+======================================================== */
+#bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:800;background:var(--glass);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:.5rem 0;padding-bottom:calc(.5rem + env(safe-area-inset-bottom))}
+@media(min-width:1024px){#bottom-nav{display:none}}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:.5rem .25rem;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);transition:color .2s;cursor:pointer}
+.bnav-item.active,.bnav-item:hover{color:var(--gold)}
+.bnav-item svg{width:20px;height:20px}
+
+/* ========================================================
+   HERO
+======================================================== */
+#hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0d0d0d 0%,#1A1A1A 40%,#1f1a12 100%)}
+.hero-grain{position:absolute;inset:0;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.hero-orb-1{width:600px;height:600px;background:radial-gradient(circle,rgba(200,168,93,.12) 0%,transparent 70%);top:-100px;right:-100px}
+.hero-orb-2{width:400px;height:400px;background:radial-gradient(circle,rgba(200,168,93,.06) 0%,transparent 70%);bottom:-50px;left:-50px}
+.hero-content{position:relative;z-index:2;max-width:780px}
+.hero-eyebrow{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+.hero-eyebrow-line{width:40px;height:1px;background:var(--gold)}
+.hero-title{margin-bottom:1.25rem}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-subtitle{font-size:1.05rem;color:var(--muted);max-width:480px;margin-bottom:2.5rem;line-height:1.8}
+.hero-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:3rem}
+.hero-stats{display:flex;flex-wrap:wrap;gap:2rem}
+.hero-stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--gold)}
+.hero-stat-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.1rem}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--muted);font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:color .2s}
+.hero-scroll:hover{color:var(--gold)}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollLine 2s ease-in-out infinite}
+@keyframes scrollLine{0%,100%{transform:scaleY(1);opacity:1}50%{transform:scaleY(.5);opacity:.4}}
+
+/* ===================== QUICK BOOKING STRIP ===================== */
+#quick-book{padding:2rem 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.quick-book-inner{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;justify-content:space-between}
+.qb-select{background:var(--surface-alt);border:1px solid var(--border);color:var(--text);padding:.75rem 1rem;border-radius:var(--radius-md);font-family:'Jost',sans-serif;font-size:14px;flex:1;min-width:150px;outline:none;transition:border-color .2s;appearance:none;cursor:pointer}
+.qb-select:focus{border-color:var(--gold)}
+.qb-date{background:var(--surface-alt);border:1px solid var(--border);color:var(--text);padding:.75rem 1rem;border-radius:var(--radius-md);font-family:'Jost',sans-serif;font-size:14px;flex:1;min-width:150px;outline:none;transition:border-color .2s;cursor:pointer}
+.qb-date:focus{border-color:var(--gold)}
+.qb-date::-webkit-calendar-picker-indicator{filter:invert(.6)}
+
+/* ===================== SECTION HEADER ===================== */
+.section-header{text-align:center;margin-bottom:3.5rem}
+.section-header .ui-label{color:var(--gold);margin-bottom:.75rem;display:block}
+.section-header p{color:var(--muted);max-width:520px;margin:.75rem auto 0;line-height:1.8}
+
+/* ========================================================
+   SERVICES
+======================================================== */
+.service-card{position:relative;overflow:hidden;border-radius:var(--radius-lg);aspect-ratio:3/4;cursor:pointer}
+.service-card img,.service-card .service-img-placeholder{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--transition)}
+.service-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem}
+.service-card:hover img,.service-card:hover .service-img-placeholder{transform:scale(1.04)}
+.service-card-price{color:var(--gold);font-size:13px;letter-spacing:.1em;margin-bottom:.35rem}
+.service-card-duration{color:var(--muted);font-size:12px;margin-top:.25rem}
+.service-img-placeholder{display:flex;align-items:center;justify-content:center;font-size:3rem;flex-shrink:0}
+
+/* ===================== SERVICE FILTER ===================== */
+.filter-bar{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2.5rem;justify-content:center}
+.filter-pill{padding:.5rem 1.25rem;border:1px solid var(--border);border-radius:999px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:all .2s;cursor:pointer;background:none}
+.filter-pill:hover,.filter-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(200,168,93,.08)}
+
+/* ========================================================
+   RITUALS (FEATURED)
+======================================================== */
+.ritual-card{border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;transition:transform var(--transition),box-shadow var(--transition)}
+.ritual-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.ritual-img{aspect-ratio:16/9;overflow:hidden;position:relative}
+.ritual-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.ritual-body{padding:1.5rem;flex:1;display:flex;flex-direction:column;gap:.75rem}
+.ritual-meta{display:flex;justify-content:space-between;align-items:center}
+.ritual-actions{display:flex;gap:.75rem;margin-top:auto;padding-top:1rem}
+
+/* ========================================================
+   THERAPISTS
+======================================================== */
+.therapist-card{text-align:center;padding:2rem 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);transition:transform var(--transition),box-shadow var(--transition)}
+.therapist-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.therapist-avatar{width:90px;height:90px;border-radius:50%;margin:0 auto 1rem;background:var(--surface-alt);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden}
+.therapist-specialty{color:var(--gold);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:.35rem 0 .75rem}
+.therapist-bio{color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:1rem}
+
+/* ========================================================
+   BOUTIQUE / SHOP
+======================================================== */
+.product-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:transform var(--transition),box-shadow var(--transition);cursor:pointer}
+.product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.product-img{aspect-ratio:1;overflow:hidden;position:relative;background:var(--surface-alt)}
+.product-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.product-img:hover img{transform:scale(1.05)}
+.product-body{padding:1.25rem}
+.product-price{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;margin:.35rem 0 1rem}
+.product-actions{display:flex;gap:.5rem}
+.add-cart-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.6rem;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);font-size:12px;letter-spacing:.1em;text-transform:uppercase;transition:all .2s;color:var(--text)}
+.add-cart-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,168,93,.06)}
+.add-cart-btn.bump{animation:cartBump .3s ease}
+@keyframes cartBump{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+.wishlist-btn{padding:.6rem;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);transition:all .2s;color:var(--muted)}
+.wishlist-btn:hover{border-color:var(--error);color:var(--error)}
+
+/* ========================================================
+   OFFERS
+======================================================== */
+.offer-card{background:linear-gradient(135deg,rgba(200,168,93,.08) 0%,var(--surface) 100%);border:1px solid rgba(200,168,93,.18);border-radius:var(--radius-lg);padding:2rem;position:relative;overflow:hidden;transition:transform var(--transition)}
+.offer-card:hover{transform:translateY(-3px)}
+.offer-badge{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:300;color:var(--gold);line-height:1}
+.offer-validity{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+.offer-corner{position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(200,168,93,.12),transparent 70%)}
+
+/* ========================================================
+   MEMBERSHIP
+======================================================== */
+.membership-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem;display:flex;flex-direction:column;gap:1.5rem;transition:transform var(--transition),border-color var(--transition);position:relative;overflow:hidden}
+.membership-card.featured{border-color:var(--gold);background:linear-gradient(135deg,rgba(200,168,93,.06) 0%,var(--surface) 100%)}
+.membership-card.featured::before{content:'Most Popular';position:absolute;top:1.25rem;right:1.25rem;background:var(--gold);color:var(--bg);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .75rem;border-radius:999px;font-weight:500}
+.membership-price{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--gold);line-height:1}
+.membership-price sup{font-size:1.2rem;vertical-align:top;margin-top:.5rem}
+.membership-price sub{font-size:.9rem;color:var(--muted);margin-left:.2rem}
+.membership-perks{display:flex;flex-direction:column;gap:.75rem}
+.perk{display:flex;align-items:center;gap:.75rem;font-size:14px;color:var(--muted)}
+.perk-check{width:18px;height:18px;border-radius:50%;background:rgba(111,207,151,.15);border:1px solid rgba(111,207,151,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:var(--success)}
+
+/* ========================================================
+   TESTIMONIALS
+======================================================== */
+.testimonial-card{padding:2rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg)}
+.stars{display:flex;gap:.25rem;margin-bottom:1rem;color:var(--gold);font-size:.9rem}
+.testimonial-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;font-weight:300;line-height:1.8;color:var(--gold-light);margin-bottom:1.5rem}
+.testimonial-author{display:flex;align-items:center;gap:.75rem}
+.testimonial-avatar{width:40px;height:40px;border-radius:50%;background:var(--surface-alt);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.testimonial-name{font-size:14px;font-weight:500}
+.testimonial-meta{font-size:12px;color:var(--muted)}
+
+/* ========================================================
+   JOURNAL
+======================================================== */
+.journal-card{border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);border:1px solid var(--border);transition:transform var(--transition)}
+.journal-card:hover{transform:translateY(-3px)}
+.journal-img{aspect-ratio:16/9;background:var(--surface-alt);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.journal-body{padding:1.5rem}
+.journal-cat{color:var(--gold);font-size:11px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.journal-date{color:var(--muted);font-size:12px;margin-top:.5rem}
+
+/* ========================================================
+   ABOUT
+======================================================== */
+#about{background:var(--surface)}
+.about-grid{display:grid;grid-template-columns:1fr;gap:3rem}
+@media(min-width:768px){.about-grid{grid-template-columns:1fr 1fr;align-items:center}}
+.about-visual{aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;background:var(--surface-alt);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative}
+.about-visual::before{content:'';position:absolute;inset:0;border:1px solid var(--border);border-radius:var(--radius-lg);pointer-events:none;z-index:1}
+.about-body{display:flex;flex-direction:column;gap:1.5rem}
+.about-value{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)}
+.about-value-icon{width:40px;height:40px;background:rgba(200,168,93,.1);border:1px solid rgba(200,168,93,.2);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;color:var(--gold)}
+.about-value-text h4{font-size:14px;font-weight:500;margin-bottom:.25rem}
+.about-value-text p{font-size:13px;color:var(--muted)}
+
+/* ========================================================
+   CONTACT
+======================================================== */
+.contact-grid{display:grid;grid-template-columns:1fr;gap:3rem}
+@media(min-width:768px){.contact-grid{grid-template-columns:1fr 1fr}}
+.input-group{margin-bottom:1.25rem}
+.input-label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.input{width:100%;background:var(--surface-alt);border:1px solid var(--border);color:var(--text);padding:.875rem 1rem;border-radius:var(--radius-md);font-family:'Jost',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.input:focus{border-color:var(--gold)}
+.input::placeholder{color:var(--muted)}
+textarea.input{resize:vertical;min-height:120px}
+.contact-info{display:flex;flex-direction:column;gap:1.5rem}
+.contact-item{display:flex;gap:1rem;align-items:flex-start}
+.contact-icon{width:42px;height:42px;background:rgba(200,168,93,.1);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.contact-item-body h4{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.contact-item-body p{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* ========================================================
+   FOOTER
+======================================================== */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:4rem 0 2rem}
+.footer-grid{display:grid;grid-template-columns:1fr;gap:2.5rem;margin-bottom:3rem}
+@media(min-width:640px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.footer-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+.footer-brand{display:flex;flex-direction:column;gap:1rem}
+.footer-brand p{color:var(--muted);font-size:14px;line-height:1.8;max-width:280px}
+.footer-col h5{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.footer-col ul{display:flex;flex-direction:column;gap:.5rem}
+.footer-col a{font-size:14px;color:var(--muted);transition:color .2s}
+.footer-col a:hover{color:var(--text)}
+.footer-social{display:flex;gap:.75rem}
+.social-btn{width:38px;height:38px;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .2s;color:var(--muted)}
+.social-btn:hover{border-color:var(--gold);color:var(--gold)}
+.footer-bottom{padding-top:1.5rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;font-size:12px;color:var(--muted)}
+
+/* ========================================================
+   CART SIDEBAR
+======================================================== */
+#cart-sidebar{position:fixed;top:0;right:0;width:min(420px,100vw);height:100%;background:var(--surface);border-left:1px solid var(--border);z-index:1100;transform:translateX(100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94);display:flex;flex-direction:column}
+#cart-sidebar.open{transform:translateX(0)}
+.cart-header{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.cart-items{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+.cart-item{display:flex;gap:1rem;padding:1rem;background:var(--surface-alt);border-radius:var(--radius-md);border:1px solid var(--border)}
+.cart-item-img{width:60px;height:60px;border-radius:var(--radius-md);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.cart-item-body{flex:1}
+.cart-item-name{font-size:14px;font-weight:500;margin-bottom:.25rem}
+.cart-item-price{color:var(--gold);font-size:13px}
+.cart-qty{display:flex;align-items:center;gap:.5rem;margin-top:.5rem}
+.qty-btn{width:26px;height:26px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:border-color .2s;color:var(--text)}
+.qty-btn:hover{border-color:var(--gold);color:var(--gold)}
+.qty-val{font-size:13px;min-width:20px;text-align:center}
+.cart-footer{padding:1.5rem;border-top:1px solid var(--border)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem}
+.cart-total-val{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--gold)}
+#cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1090;display:none}
+#cart-overlay.open{display:block}
+
+/* ========================================================
+   BOOKING MODAL
+======================================================== */
+#booking-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:1rem}
+#booking-modal.open{display:flex}
+#booking-overlay{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
+.booking-panel{position:relative;z-index:1;width:100%;max-width:640px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);max-height:90vh;overflow-y:auto;animation:modalIn .35s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.booking-header{padding:2rem 2rem 1.5rem;border-bottom:1px solid var(--border)}
+.booking-steps{display:flex;gap:.5rem;margin-top:1.5rem}
+.booking-step{flex:1;height:3px;background:var(--border);border-radius:999px;transition:background .4s}
+.booking-step.active{background:var(--gold)}
+.booking-step.done{background:rgba(200,168,93,.4)}
+.booking-body{padding:2rem}
+.booking-footer{padding:1.5rem 2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.step-content{display:none}
+.step-content.active{display:block}
+.service-option{padding:1rem 1.25rem;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:1rem;margin-bottom:.75rem}
+.service-option:hover,.service-option.selected{border-color:var(--gold);background:rgba(200,168,93,.06)}
+.service-option-icon{width:42px;height:42px;border-radius:var(--radius-md);background:rgba(200,168,93,.1);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--gold);flex-shrink:0}
+.time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:1rem}
+@media(min-width:400px){.time-grid{grid-template-columns:repeat(4,1fr)}}
+.time-slot{padding:.6rem .5rem;text-align:center;font-size:13px;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);cursor:pointer;transition:all .2s;color:var(--muted)}
+.time-slot:hover,.time-slot.selected{border-color:var(--gold);color:var(--gold);background:rgba(200,168,93,.06)}
+.time-slot.unavail{opacity:.35;cursor:not-allowed;pointer-events:none}
+.confirm-row{display:flex;justify-content:space-between;align-items:center;padding:.875rem 0;border-bottom:1px solid var(--border);font-size:14px}
+.confirm-row:last-child{border-bottom:none}
+.confirm-label{color:var(--muted)}
+.confirm-val{font-weight:500;text-align:right}
+
+/* ========================================================
+   CHAT WIDGET
+======================================================== */
+#chat-widget{position:fixed;bottom:5rem;right:1.25rem;z-index:850;display:flex;flex-direction:column;align-items:flex-end;gap:.75rem}
+@media(min-width:1024px){#chat-widget{bottom:1.75rem}}
+#chat-panel{width:min(340px,90vw);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);transform-origin:bottom right;transform:scale(.9) translateY(10px);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.25,.46,.45,.94);overflow:hidden}
+#chat-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+.chat-head{padding:1rem 1.25rem;background:var(--surface-alt);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.chat-messages{height:260px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.75rem}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px}
+.chat-msg{max-width:80%;padding:.7rem .9rem;border-radius:var(--radius-md);font-size:13px;line-height:1.6;animation:msgIn .25s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.user{background:rgba(200,168,93,.12);border:1px solid rgba(200,168,93,.2);align-self:flex-end;color:var(--text)}
+.chat-msg.bot{background:var(--surface-alt);border:1px solid var(--border);align-self:flex-start;color:var(--muted)}
+.chat-input-area{padding:.875rem 1rem;border-top:1px solid var(--border);display:flex;gap:.5rem}
+.chat-input{flex:1;background:var(--surface-alt);border:1px solid var(--border);color:var(--text);padding:.6rem .875rem;border-radius:var(--radius-md);font-size:13px;font-family:'Jost',sans-serif;outline:none;transition:border-color .2s}
+.chat-input:focus{border-color:var(--gold)}
+.chat-toggle{width:50px;height:50px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:all .2s;box-shadow:0 8px 20px rgba(200,168,93,.35)}
+.chat-toggle:hover{transform:scale(1.05);box-shadow:0 12px 28px rgba(200,168,93,.45)}
+.chat-badge{position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:var(--error);border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);color:white}
+.chat-toggle-wrap{position:relative}
+
+/* ========================================================
+   ADMIN PANEL
+======================================================== */
+#admin-panel{position:fixed;inset:0;z-index:1500;background:var(--bg);display:none;overflow:hidden}
+#admin-panel.open{display:flex}
+.admin-sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:0;padding:0;flex-shrink:0;overflow-y:auto}
+@media(max-width:767px){.admin-sidebar{position:fixed;left:0;top:0;bottom:0;z-index:10;transform:translateX(-100%);transition:transform .3s}.admin-sidebar.open{transform:translateX(0)}}
+.admin-logo{padding:1.5rem;border-bottom:1px solid var(--border)}
+.admin-nav{padding:1rem 0;flex:1}
+.admin-link{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem;font-size:13px;letter-spacing:.06em;color:var(--muted);transition:all .2s;cursor:pointer;border-left:2px solid transparent}
+.admin-link:hover,.admin-link.active{color:var(--text);background:rgba(200,168,93,.06);border-left-color:var(--gold)}
+.admin-link.active{color:var(--gold)}
+.admin-link-icon{font-size:1rem;width:20px;text-align:center}
+.admin-content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.admin-topbar{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;background:var(--surface)}
+.admin-page{display:none;flex:1;overflow-y:auto;padding:1.5rem}
+.admin-page.active{display:block}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:2rem}
+@media(min-width:640px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--gold);margin-bottom:.25rem}
+.stat-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stat-change{font-size:11px;margin-top:.5rem;display:flex;align-items:center;gap:.25rem}
+.stat-change.up{color:var(--success)}
+.stat-change.down{color:var(--error)}
+.admin-table{width:100%;border-collapse:collapse;font-size:13px}
+.admin-table th{text-align:left;padding:.75rem 1rem;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);font-weight:400}
+.admin-table td{padding:.875rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:rgba(255,255,255,.02)}
+.admin-section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+.admin-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.admin-card-head{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.admin-card-body{padding:1.25rem}
+
+/* Mini chart */
+.mini-chart{display:flex;align-items:flex-end;gap:4px;height:60px;padding:0 .25rem}
+.mini-bar{flex:1;background:rgba(200,168,93,.2);border-radius:2px 2px 0 0;transition:background .2s;cursor:pointer;min-width:6px}
+.mini-bar:hover{background:rgba(200,168,93,.6)}
+
+/* ========================================================
+   NOTIFICATIONS TOAST
+======================================================== */
+#toast-container{position:fixed;top:5rem;right:1.25rem;z-index:2000;display:flex;flex-direction:column;gap:.5rem}
+.toast{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.875rem 1.25rem;display:flex;align-items:center;gap:.75rem;font-size:13px;min-width:240px;max-width:320px;animation:toastIn .35s ease;box-shadow:var(--shadow)}
+.toast.exit{animation:toastOut .35s ease forwards}
+.toast-icon{font-size:1rem;flex-shrink:0}
+.toast-text{flex:1}
+.toast-close{color:var(--muted);font-size:.9rem;cursor:pointer;transition:color .2s}
+.toast-close:hover{color:var(--text)}
+.toast.success{border-left:3px solid var(--success)}
+.toast.error{border-left:3px solid var(--error)}
+.toast.info{border-left:3px solid var(--gold)}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(20px)}}
+
+/* ========================================================
+   SCROLL ANIMATIONS
+======================================================== */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .6s ease,transform .6s ease}
+.reveal-left.in{opacity:1;transform:none}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .6s ease,transform .6s ease}
+.reveal-right.in{opacity:1;transform:none}
+
+/* ========================================================
+   FLOATING CTA
+======================================================== */
+#float-cta{position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%);z-index:700;display:none}
+@media(min-width:1024px){#float-cta{display:none !important}}
+
+/* ========================================================
+   UTILITY
+======================================================== */
+.text-center{text-align:center}
+.mt-1{margin-top:.5rem}.mt-2{margin-top:1rem}.mt-3{margin-top:1.5rem}.mt-4{margin-top:2rem}
+.mb-1{margin-bottom:.5rem}.mb-2{margin-bottom:1rem}.mb-3{margin-bottom:1.5rem}.mb-4{margin-bottom:2rem}
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-1{gap:.5rem}.gap-2{gap:1rem}
+.w-full{width:100%}
+.hidden{display:none !important}
+
+/* ========================================================
+   SCROLLBAR
+======================================================== */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+
+/* ========================================================
+   RESPONSIVE UTILS
+======================================================== */
+@media(max-width:767px){
+  .section{padding:3.5rem 0}
+  .booking-panel{max-height:95vh}
+  body{padding-bottom:4rem}
+  #chat-widget{bottom:5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TOAST CONTAINER
+============================================================ -->
+<div id="toast-container"></div>
+
+<!-- ============================================================
+     HEADER
+============================================================ -->
+<header id="header">
+  <div class="container">
+    <nav class="nav">
+      <a href="#" class="logo">A<span>U</span>RUM</a>
+      <ul class="nav-links">
+        <li><a href="#services" class="nav-link">Services</a></li>
+        <li><a href="#rituals" class="nav-link">Rituals</a></li>
+        <li><a href="#therapists" class="nav-link">Team</a></li>
+        <li><a href="#boutique" class="nav-link">Boutique</a></li>
+        <li><a href="#offers" class="nav-link">Offers</a></li>
+        <li><a href="#journal" class="nav-link">Journal</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn btn-ghost btn-icon" id="cart-btn" title="Cart" aria-label="Open cart">
+          🛍️ <span id="cart-count" style="font-size:11px;background:var(--gold);color:var(--bg);border-radius:999px;padding:.1rem .4rem;margin-left:.2rem">0</span>
+        </button>
+        <button class="btn btn-primary" id="nav-book-btn" style="display:none" onclick="openBooking()">Book</button>
+        <button class="btn btn-primary" onclick="openBooking()" style="display:none" id="nav-book-desktop">Book Now</button>
+        <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <button class="btn btn-ghost btn-icon" onclick="openAdmin()" title="Admin" aria-label="Admin panel" style="font-size:.85rem">⚙️</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Show Book Now only on desktop nav -->
+<script>
+document.querySelector('#nav-book-desktop').style.display='';
+</script>
+<style>#nav-book-desktop{display:none !important}@media(min-width:1024px){#nav-book-desktop{display:inline-flex !important}}</style>
+
+<!-- ============================================================
+     MOBILE DRAWER
+============================================================ -->
+<div id="drawer">
+  <div id="drawer-overlay" onclick="closeDrawer()"></div>
+  <div id="drawer-panel">
+    <div class="drawer-header">
+      <span class="logo" style="font-size:1.3rem">A<span style="color:var(--gold)">U</span>RUM</span>
+      <button onclick="closeDrawer()" style="font-size:1.4rem;color:var(--muted)">✕</button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="#services" class="drawer-link" onclick="closeDrawer()">Services</a>
+      <a href="#rituals" class="drawer-link" onclick="closeDrawer()">Rituals</a>
+      <a href="#therapists" class="drawer-link" onclick="closeDrawer()">Team</a>
+      <a href="#boutique" class="drawer-link" onclick="closeDrawer()">Boutique</a>
+      <a href="#offers" class="drawer-link" onclick="closeDrawer()">Offers</a>
+      <a href="#membership" class="drawer-link" onclick="closeDrawer()">Membership</a>
+      <a href="#journal" class="drawer-link" onclick="closeDrawer()">Journal</a>
+      <a href="#contact" class="drawer-link" onclick="closeDrawer()">Contact</a>
+    </nav>
+    <button class="btn btn-primary w-full" onclick="closeDrawer();openBooking()">Book Appointment</button>
+    <div style="margin-top:auto;padding-top:1rem;border-top:1px solid var(--border);font-size:12px;color:var(--muted);text-align:center">
+      © 2025 AURUM Luxury Salon
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="container" style="padding-top:8rem;padding-bottom:6rem">
+    <div class="hero-content">
+      <div class="hero-eyebrow reveal">
+        <div class="hero-eyebrow-line"></div>
+        <span class="ui-label" style="color:var(--gold)">Luxury Unisex Salon</span>
+      </div>
+      <h1 class="h1 hero-title reveal">
+        Where beauty<br/>becomes a <em>ritual</em>
+      </h1>
+      <p class="hero-subtitle reveal">
+        Immerse yourself in bespoke treatments, curated by master therapists — a sanctuary of elegance in the heart of the city.
+      </p>
+      <div class="hero-actions reveal">
+        <button class="btn btn-primary" onclick="openBooking()">Book a Treatment</button>
+        <a href="#rituals" class="btn btn-outline">Explore Rituals</a>
+      </div>
+      <div class="hero-stats reveal">
+        <div>
+          <div class="hero-stat-val">12+</div>
+          <div class="hero-stat-label">Years of Excellence</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">50+</div>
+          <div class="hero-stat-label">Signature Services</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">4.9★</div>
+          <div class="hero-stat-label">Client Rating</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">8K+</div>
+          <div class="hero-stat-label">Happy Clients</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll" onclick="document.querySelector('#quick-book').scrollIntoView({behavior:'smooth'})">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     QUICK BOOKING STRIP
+============================================================ -->
+<section id="quick-book">
+  <div class="container">
+    <div class="quick-book-inner">
+      <select class="qb-select" id="qb-service">
+        <option value="">Select Service</option>
+        <option>Signature Facial</option>
+        <option>Hair Couture</option>
+        <option>Body Ritual</option>
+        <option>Nail Art</option>
+        <option>Bridal Package</option>
+      </select>
+      <select class="qb-select" id="qb-therapist">
+        <option value="">Select Therapist</option>
+        <option>Priya Sharma</option>
+        <option>Arjun Mehta</option>
+        <option>Leila Hassan</option>
+        <option>Rohan Das</option>
+      </select>
+      <input type="date" class="qb-date" id="qb-date"/>
+      <select class="qb-select" id="qb-time">
+        <option value="">Select Time</option>
+        <option>10:00 AM</option>
+        <option>11:30 AM</option>
+        <option>01:00 PM</option>
+        <option>02:30 PM</option>
+        <option>04:00 PM</option>
+        <option>05:30 PM</option>
+      </select>
+      <button class="btn btn-primary" onclick="handleQuickBook()">Check Availability</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SERVICES
+============================================================ -->
+<section id="services" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="ui-label">Our Atelier</span>
+      <h2 class="h2">Services</h2>
+      <p>From transformative hair artistry to soul-nourishing body rituals — each treatment is a masterpiece crafted for you.</p>
+    </div>
+    <div class="filter-bar reveal">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="hair">Hair</button>
+      <button class="filter-pill" data-filter="skin">Skin</button>
+      <button class="filter-pill" data-filter="body">Body</button>
+      <button class="filter-pill" data-filter="nails">Nails</button>
+      <button class="filter-pill" data-filter="bridal">Bridal</button>
+    </div>
+    <div class="grid-3" id="services-grid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEATURED RITUALS
+============================================================ -->
+<section id="rituals" class="section" style="background:var(--surface)">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="ui-label">Featured Experiences</span>
+      <h2 class="h2">Signature Rituals</h2>
+      <p>Curated journeys that transcend conventional treatments — immersive, multi-sensory, unforgettable.</p>
+    </div>
+    <div class="grid-3" id="rituals-grid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     THERAPISTS
+============================================================ -->
+<section id="therapists" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="ui-label">Master Practitioners</span>
+      <h2 class="h2">Our Therapists</h2>
+      <p>Each specialist brings years of mastery, artistry, and intuition to your personal journey.</p>
+    </div>
+    <div class="grid-4" id="therapists-grid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BOUTIQUE
+============================================================ -->
+<section id="boutique" class="section" style="background:var(--surface)">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="ui-label">Curated Products</span>
+      <h2 class="h2">The Boutique</h2>
+      <p>Luxury formulations and professional-grade products to extend your salon experience at home.</p>
+    </div>
+    <div class="filter-bar reveal">
+      <button class="filter-pill active" data-filter-shop="all">All</button>
+      <button class="filter-pill" data-filter-shop="hair">Hair Care</button>
+      <button class="filter-pill" data-filter-shop="skin">Skin Care</button>
+      <button class="filter-pill" data-filter-shop="body">Body</button>
+      <button class="filter-pill" data-filter-shop="tools">Tools</button>
+    </div>
+    <div class="grid-4" id="products-grid">
+      <!-- injected by JS -->
+    </div>
+    <div class="text-center mt-4 reveal">
+      <button class="btn btn-outline">View Full Collection</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     OFFERS
+============================================================ -->
+<section id="offers" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="ui-label">Exclusive Deals</span>
+      <h2 class="h2">Current Offers</h2>
+    </div>
+    <div class="grid-3" id="offers-grid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MEMBERSHIP
+============================================================ -->
+<section id="membership" class="section" style="background:var(--surface)">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="ui-label">Exclusive Access</span>
+      <h2 class="h2">Membership Plans</h2>
+      <p>Unlock priority bookings, exclusive discounts, and bespoke privileges curated for the discerning few.</p>
+    </div>
+    <div class="grid-3" id="membership-grid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TESTIMONIALS
+============================================================ -->
+<section id="testimonials" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="ui-label">Client Stories</span>
+      <h2 class="h2">What They Say</h2>
+    </div>
+    <div class="grid-3" id="testimonials-grid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     JOURNAL
+============================================================ -->
+<section id="journal" class="section" style="background:var(--surface)">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="ui-label">Beauty & Wellness</span>
+      <h2 class="h2">The Journal</h2>
+      <p>Expert insights, beauty rituals, and editorial stories from the world of luxury wellness.</p>
+    </div>
+    <div class="grid-3" id="journal-grid">
+      <!-- injected by JS -->
+    </div>
+    <div class="text-center mt-4 reveal">
+      <button class="btn btn-outline">Read All Articles</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT
+============================================================ -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal-left">🌿</div>
+      <div class="about-body reveal-right">
+        <span class="ui-label" style="color:var(--gold)">Our Story</span>
+        <h2 class="h2">Crafted with<br/><em style="font-style:italic;color:var(--gold)">Intention</em></h2>
+        <p style="color:var(--muted);line-height:1.9">Founded in 2013, AURUM was born from the belief that beauty is a philosophy — a commitment to the art of presence. Our space is designed for those who value quiet luxury, expert craft, and transformative experiences.</p>
+        <div>
+          <div class="about-value">
+            <div class="about-value-icon">✦</div>
+            <div class="about-value-text">
+              <h4>Premium Formulations</h4>
+              <p>We use only certified organic and luxury-grade products sourced from global artisans.</p>
+            </div>
+          </div>
+          <div class="about-value">
+            <div class="about-value-icon">♦</div>
+            <div class="about-value-text">
+              <h4>Expert Practitioners</h4>
+              <p>Each therapist undergoes 200+ hours of bespoke AURUM training annually.</p>
+            </div>
+          </div>
+          <div class="about-value">
+            <div class="about-value-icon">◈</div>
+            <div class="about-value-text">
+              <h4>Personalised Experience</h4>
+              <p>Every treatment is tailored to your unique skin, hair, and wellness profile.</p>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary mt-2">Discover Our Philosophy</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+============================================================ -->
+<section id="contact" class="section" style="background:var(--surface)">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="ui-label">Get in Touch</span>
+      <h2 class="h2">Visit Us</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal-left">
+        <div class="input-group"><label class="input-label">Your Name</label><input class="input" placeholder="Alexandra Mirren"/></div>
+        <div class="input-group"><label class="input-label">Email</label><input class="input" type="email" placeholder="hello@example.com"/></div>
+        <div class="input-group"><label class="input-label">Phone</label><input class="input" type="tel" placeholder="+91 98765 43210"/></div>
+        <div class="input-group"><label class="input-label">Message</label><textarea class="input" placeholder="Tell us how we can assist you…"></textarea></div>
+        <button class="btn btn-primary w-full" onclick="showToast('Message sent! We\'ll be in touch shortly.','success')">Send Message</button>
+      </div>
+      <div class="contact-info reveal-right">
+        <div class="contact-item"><div class="contact-icon">📍</div><div class="contact-item-body"><h4>Location</h4><p>Level 3, The Promenade<br/>Cyber Hub, Gurugram — 122002</p></div></div>
+        <div class="contact-item"><div class="contact-icon">🕐</div><div class="contact-item-body"><h4>Hours</h4><p>Monday – Saturday: 10 AM – 8 PM<br/>Sunday: 11 AM – 6 PM</p></div></div>
+        <div class="contact-item"><div class="contact-icon">📞</div><div class="contact-item-body"><h4>Phone</h4><p>+91 124 456 7890<br/>+91 98765 43210</p></div></div>
+        <div class="contact-item"><div class="contact-icon">✉️</div><div class="contact-item-body"><h4>Email</h4><p>hello@aurumstudio.in<br/>bookings@aurumstudio.in</p></div></div>
+        <div style="padding:1.5rem;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-lg);text-align:center">
+          <p class="ui-label" style="color:var(--gold);margin-bottom:1rem">Follow Our Journey</p>
+          <div class="footer-social" style="justify-content:center">
+            <a href="#" class="social-btn">📸</a>
+            <a href="#" class="social-btn">🐦</a>
+            <a href="#" class="social-btn">▶️</a>
+            <a href="#" class="social-btn">🔗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo" style="font-size:1.5rem">A<span>U</span>RUM</span>
+        <p>Where every visit is a ceremony — a quiet luxury experience designed to restore, elevate and inspire.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn">📸</a>
+          <a href="#" class="social-btn">🐦</a>
+          <a href="#" class="social-btn">▶️</a>
+          <a href="#" class="social-btn">🔗</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#">Hair Couture</a></li>
+          <li><a href="#">Signature Facials</a></li>
+          <li><a href="#">Body Rituals</a></li>
+          <li><a href="#">Nail Atelier</a></li>
+          <li><a href="#">Bridal Suite</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Team</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Partnerships</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="#">Cancellation</a></li>
+          <li><a href="#">Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 AURUM Studio Pvt. Ltd. All rights reserved.</span>
+      <span>Crafted with intention in Gurugram</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     BOTTOM NAV
+============================================================ -->
+<nav id="bottom-nav">
+  <div class="bnav-item active" onclick="scrollTo({top:0,behavior:'smooth'})">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H15.75v-4.5h-7.5v4.5H3.75A.75.75 0 013 21V9.75z"/></svg>
+    Home
+  </div>
+  <div class="bnav-item" onclick="document.querySelector('#services').scrollIntoView({behavior:'smooth'})">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+    Services
+  </div>
+  <div class="bnav-item" onclick="openBooking()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+    Book
+  </div>
+  <div class="bnav-item" onclick="document.querySelector('#boutique').scrollIntoView({behavior:'smooth'});openCart()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"/></svg>
+    Shop
+  </div>
+  <div class="bnav-item" onclick="showToast('Sign in to view your profile','info')">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+    Profile
+  </div>
+</nav>
+
+<!-- ============================================================
+     CART SIDEBAR
+============================================================ -->
+<div id="cart-overlay" onclick="closeCart()"></div>
+<aside id="cart-sidebar">
+  <div class="cart-header">
+    <div>
+      <h3 class="h4">Your Cart</h3>
+      <p style="font-size:12px;color:var(--muted)" id="cart-count-label">0 items</p>
+    </div>
+    <button onclick="closeCart()" style="font-size:1.3rem;color:var(--muted)">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items-container">
+    <div style="text-align:center;padding:3rem 1rem;color:var(--muted)">
+      <div style="font-size:2.5rem;margin-bottom:1rem">🛍️</div>
+      <p style="font-size:14px">Your cart is empty</p>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="ui-label">Total</span>
+      <span class="cart-total-val" id="cart-total">₹0</span>
+    </div>
+    <button class="btn btn-primary w-full" onclick="showToast('Redirecting to checkout...','info')">Proceed to Checkout</button>
+  </div>
+</aside>
+
+<!-- ============================================================
+     BOOKING MODAL
+============================================================ -->
+<div id="booking-modal">
+  <div id="booking-overlay" onclick="closeBooking()"></div>
+  <div class="booking-panel">
+    <div class="booking-header">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <h3 class="h4">Book an Appointment</h3>
+          <p style="font-size:13px;color:var(--muted);margin-top:.25rem" id="booking-step-label">Step 1 of 4 — Choose a Service</p>
+        </div>
+        <button onclick="closeBooking()" style="font-size:1.3rem;color:var(--muted);margin-top:-.25rem">✕</button>
+      </div>
+      <div class="booking-steps">
+        <div class="booking-step active" id="bs-1"></div>
+        <div class="booking-step" id="bs-2"></div>
+        <div class="booking-step" id="bs-3"></div>
+        <div class="booking-step" id="bs-4"></div>
+      </div>
+    </div>
+    <div class="booking-body" id="booking-body">
+      <!-- Step 1: Service -->
+      <div class="step-content active" id="step-1">
+        <p class="ui-label" style="margin-bottom:1rem;color:var(--muted)">Select a service</p>
+        <div id="booking-service-list"></div>
+      </div>
+      <!-- Step 2: Therapist -->
+      <div class="step-content" id="step-2">
+        <p class="ui-label" style="margin-bottom:1rem;color:var(--muted)">Choose your therapist</p>
+        <div id="booking-therapist-list"></div>
+      </div>
+      <!-- Step 3: Date & Time -->
+      <div class="step-content" id="step-3">
+        <p class="ui-label" style="margin-bottom:1rem;color:var(--muted)">Select date & time</p>
+        <div class="input-group"><label class="input-label">Date</label><input type="date" class="input" id="booking-date" min=""/></div>
+        <p class="ui-label" style="margin:.75rem 0 .5rem;color:var(--muted)">Available slots</p>
+        <div class="time-grid" id="booking-time-grid"></div>
+      </div>
+      <!-- Step 4: Confirm -->
+      <div class="step-content" id="step-4">
+        <p class="ui-label" style="margin-bottom:1rem;color:var(--muted)">Confirm your booking</p>
+        <div id="booking-summary" style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.25rem;margin-bottom:1.25rem"></div>
+        <div class="input-group"><label class="input-label">Your Name</label><input class="input" placeholder="Full name" id="booking-name"/></div>
+        <div class="input-group"><label class="input-label">Phone</label><input class="input" type="tel" placeholder="+91 98765 43210" id="booking-phone"/></div>
+        <div class="input-group"><label class="input-label">Special Requests</label><textarea class="input" rows="3" placeholder="Any allergies, preferences…" id="booking-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="booking-footer">
+      <button class="btn btn-ghost" id="booking-back" onclick="bookingBack()" style="display:none">← Back</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" id="booking-next" onclick="bookingNext()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     CHAT WIDGET
+============================================================ -->
+<div id="chat-widget">
+  <div id="chat-panel">
+    <div class="chat-head">
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div style="width:34px;height:34px;border-radius:50%;background:rgba(200,168,93,.15);border:1px solid rgba(200,168,93,.3);display:flex;align-items:center;justify-content:center;font-size:.9rem">✨</div>
+        <div>
+          <div style="font-size:13px;font-weight:500">AURUM Concierge</div>
+          <div style="font-size:11px;color:var(--success);display:flex;align-items:center;gap:.3rem">● Online</div>
+        </div>
+      </div>
+      <button onclick="toggleChat()" style="color:var(--muted);font-size:.9rem">✕</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-msg bot">Hello! Welcome to AURUM. How can I assist you today? 🌿</div>
+    </div>
+    <div class="chat-input-area">
+      <input class="chat-input" id="chat-input" placeholder="Type your message…" onkeydown="if(event.key==='Enter')sendChat()"/>
+      <button class="btn btn-primary btn-icon" onclick="sendChat()">→</button>
+    </div>
+  </div>
+  <div class="chat-toggle-wrap">
+    <button class="chat-toggle" onclick="toggleChat()" aria-label="Open chat">💬</button>
+    <span class="chat-badge" id="chat-badge">1</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN PANEL
+============================================================ -->
+<div id="admin-panel">
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <span class="logo" style="font-size:1.2rem">A<span>U</span>RUM</span>
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.25rem">Admin Console</div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-link active" data-page="dashboard" onclick="switchAdmin('dashboard',this)"><span class="admin-link-icon">📊</span>Dashboard</div>
+      <div class="admin-link" data-page="appointments" onclick="switchAdmin('appointments',this)"><span class="admin-link-icon">📅</span>Appointments</div>
+      <div class="admin-link" data-page="services" onclick="switchAdmin('services',this)"><span class="admin-link-icon">✦</span>Services</div>
+      <div class="admin-link" data-page="products" onclick="switchAdmin('products',this)"><span class="admin-link-icon">🛍️</span>Products</div>
+      <div class="admin-link" data-page="offers" onclick="switchAdmin('offers',this)"><span class="admin-link-icon">🏷️</span>Offers</div>
+      <div class="admin-link" data-page="users" onclick="switchAdmin('users',this)"><span class="admin-link-icon">👤</span>Users</div>
+      <div class="admin-link" data-page="analytics" onclick="switchAdmin('analytics',this)"><span class="admin-link-icon">📈</span>Analytics</div>
+      <div class="admin-link" data-page="billing" onclick="switchAdmin('billing',this)"><span class="admin-link-icon">💳</span>Billing</div>
+    </nav>
+    <div style="padding:1rem;border-top:1px solid var(--border)">
+      <button class="btn btn-ghost w-full" style="font-size:12px;justify-content:center" onclick="closeAdmin()">← Exit Admin</button>
+    </div>
+  </aside>
+  <main class="admin-content">
+    <div class="admin-topbar">
+      <h3 class="h4" id="admin-title">Dashboard</h3>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <button class="btn btn-ghost btn-icon" style="font-size:.8rem" onclick="showToast('Notifications cleared','info')">🔔</button>
+        <div style="width:34px;height:34px;border-radius:50%;background:rgba(200,168,93,.12);border:1px solid rgba(200,168,93,.2);display:flex;align-items:center;justify-content:center;font-size:.85rem">👤</div>
+        <span style="font-size:13px">Admin</span>
+      </div>
+    </div>
+    <!-- Dashboard -->
+    <div class="admin-page active" id="page-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val">₹2.4L</div><div class="stat-label">Revenue Today</div><div class="stat-change up">↑ 12% vs yesterday</div></div>
+        <div class="stat-card"><div class="stat-val">38</div><div class="stat-label">Appointments</div><div class="stat-change up">↑ 6 vs yesterday</div></div>
+        <div class="stat-card"><div class="stat-val">14</div><div class="stat-label">New Clients</div><div class="stat-change up">↑ 3 this week</div></div>
+        <div class="stat-card"><div class="stat-val">96%</div><div class="stat-label">Satisfaction</div><div class="stat-change up">↑ 1.2%</div></div>
+      </div>
+      <div class="grid-2" style="gap:1.5rem;margin-bottom:1.5rem">
+        <div class="admin-card">
+          <div class="admin-card-head"><span style="font-size:13px;font-weight:500">Weekly Revenue</span><span class="badge badge-gold">₹14.2L</span></div>
+          <div class="admin-card-body">
+            <div class="mini-chart" id="revenue-chart"></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:.5rem;padding:0 .25rem">
+              <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+            </div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-head"><span style="font-size:13px;font-weight:500">Top Services</span></div>
+          <div class="admin-card-body">
+            <div id="top-services-list"></div>
+          </div>
+        </div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-head"><span style="font-size:13px;font-weight:500">Recent Appointments</span><button class="btn btn-ghost" style="font-size:12px;padding:.4rem .875rem">View All</button></div>
+        <div style="overflow-x:auto"><table class="admin-table" id="recent-appts-table"></table></div>
+      </div>
+    </div>
+    <!-- Appointments -->
+    <div class="admin-page" id="page-appointments">
+      <div class="admin-section-header">
+        <span style="font-size:14px;color:var(--muted)">Manage all bookings</span>
+        <button class="btn btn-primary" onclick="showToast('New appointment form coming soon','info')">+ New Appointment</button>
+      </div>
+      <div class="admin-card"><div style="overflow-x:auto"><table class="admin-table" id="appts-table"></table></div></div>
+    </div>
+    <!-- Services -->
+    <div class="admin-page" id="page-services">
+      <div class="admin-section-header">
+        <span style="font-size:14px;color:var(--muted)">Manage service catalogue</span>
+        <button class="btn btn-primary" onclick="showToast('Add service modal coming soon','info')">+ Add Service</button>
+      </div>
+      <div class="admin-card"><div style="overflow-x:auto"><table class="admin-table" id="services-table"></table></div></div>
+    </div>
+    <!-- Products -->
+    <div class="admin-page" id="page-products">
+      <div class="admin-section-header">
+        <span style="font-size:14px;color:var(--muted)">Manage boutique inventory</span>
+        <button class="btn btn-primary" onclick="showToast('Add product modal coming soon','info')">+ Add Product</button>
+      </div>
+      <div class="admin-card"><div style="overflow-x:auto"><table class="admin-table" id="products-table"></table></div></div>
+    </div>
+    <!-- Offers -->
+    <div class="admin-page" id="page-offers">
+      <div class="admin-section-header">
+        <span style="font-size:14px;color:var(--muted)">Manage promotions</span>
+        <button class="btn btn-primary" onclick="showToast('Create offer modal coming soon','info')">+ Create Offer</button>
+      </div>
+      <div class="admin-card"><div style="overflow-x:auto"><table class="admin-table" id="offers-table"></table></div></div>
+    </div>
+    <!-- Users -->
+    <div class="admin-page" id="page-users">
+      <div class="admin-section-header">
+        <span style="font-size:14px;color:var(--muted)">Client & staff management</span>
+        <input class="input" placeholder="Search users…" style="max-width:220px;padding:.5rem .875rem;font-size:13px" oninput="filterUsers(this.value)"/>
+      </div>
+      <div class="admin-card"><div style="overflow-x:auto"><table class="admin-table" id="users-table"></table></div></div>
+    </div>
+    <!-- Analytics -->
+    <div class="admin-page" id="page-analytics">
+      <div class="stat-grid" style="margin-bottom:1.5rem">
+        <div class="stat-card"><div class="stat-val">₹48L</div><div class="stat-label">Monthly Revenue</div><div class="stat-change up">↑ 18%</div></div>
+        <div class="stat-card"><div class="stat-val">1,240</div><div class="stat-label">Total Visits</div><div class="stat-change up">↑ 9%</div></div>
+        <div class="stat-card"><div class="stat-val">68%</div><div class="stat-label">Retention Rate</div><div class="stat-change down">↓ 2%</div></div>
+        <div class="stat-card"><div class="stat-val">₹3,870</div><div class="stat-label">Avg. Order Value</div><div class="stat-change up">↑ 5%</div></div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-head"><span style="font-size:13px;font-weight:500">Monthly Performance</span></div>
+        <div class="admin-card-body">
+          <div class="mini-chart" id="monthly-chart" style="height:80px"></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:.5rem;padding:0 .25rem">
+            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Billing -->
+    <div class="admin-page" id="page-billing">
+      <div class="stat-grid" style="margin-bottom:1.5rem">
+        <div class="stat-card"><div class="stat-val">₹1.2Cr</div><div class="stat-label">Annual Revenue</div><div class="stat-change up">↑ 22%</div></div>
+        <div class="stat-card"><div class="stat-val">247</div><div class="stat-label">Invoices</div><div class="stat-change up">↑ 14</div></div>
+        <div class="stat-card"><div class="stat-val">₹84K</div><div class="stat-label">Pending</div><div class="stat-change down">↑ 3 overdue</div></div>
+        <div class="stat-card"><div class="stat-val">98.4%</div><div class="stat-label">Collection Rate</div><div class="stat-change up">↑ 0.6%</div></div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-head"><span style="font-size:13px;font-weight:500">Recent Transactions</span><button class="btn btn-ghost" style="font-size:12px;padding:.4rem .875rem" onclick="showToast('Exporting CSV…','info')">Export CSV</button></div>
+        <div style="overflow-x:auto"><table class="admin-table" id="billing-table"></table></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ============================================================
+     JS
+============================================================ -->
+<script>
+// ========== DATA ==========
+const SERVICES = [
+  {id:1,name:'Signature Facial',category:'skin',duration:'60 min',price:'₹3,200',emoji:'🌸',desc:'Deep cleanse, tone & nourish with luxury botanicals'},
+  {id:2,name:'Hair Couture',category:'hair',duration:'90 min',price:'₹4,500',emoji:'✂️',desc:'Precision cut & style by master stylists'},
+  {id:3,name:'Hot Stone Massage',category:'body',duration:'75 min',price:'₹5,800',emoji:'💆',desc:'Volcanic stone therapy for deep muscle release'},
+  {id:4,name:'Nail Artistry',category:'nails',duration:'45 min',price:'₹1,800',emoji:'💅',desc:'Bespoke nail art with luxury gel formulations'},
+  {id:5,name:'Bridal Package',category:'bridal',duration:'300 min',price:'₹28,000',emoji:'💍',desc:'Full bridal preparation — hair, makeup, nails'},
+  {id:6,name:'Scalp Ritual',category:'hair',duration:'45 min',price:'₹2,600',emoji:'🌿',desc:'Therapeutic scalp treatment with Ayurvedic oils'},
+  {id:7,name:'Body Polish',category:'body',duration:'60 min',price:'₹3,900',emoji:'✨',desc:'Full body exfoliation and hydrating wrap'},
+  {id:8,name:'Anti-Ageing Facial',category:'skin',duration:'75 min',price:'₹5,500',emoji:'🍃',desc:'Peptide-rich treatment for radiant, youthful skin'},
+  {id:9,name:'Manicure & Pedicure',category:'nails',duration:'60 min',price:'₹2,400',emoji:'🌺',desc:'Indulgent hand and foot care ritual'},
+];
+
+const RITUALS = [
+  {name:'The Gold Leaf Ritual',tag:'Signature',duration:'120 min',price:'₹12,000',desc:'24-karat gold-infused facial + scalp therapy + champagne welcome.',emoji:'🥂'},
+  {name:'Himalayan Salt Journey',tag:'Wellness',duration:'90 min',price:'₹8,500',desc:'Detoxifying salt cave exfoliation followed by deep-tissue massage.',emoji:'🏔️'},
+  {name:'Midnight Orchid Ritual',tag:'Exclusive',duration:'150 min',price:'₹18,000',desc:'Black orchid body wrap, hot stone therapy & luxury hair masque.',emoji:'🌙'},
+];
+
+const THERAPISTS = [
+  {name:'Priya Sharma',specialty:'Facial & Skin',bio:'Certified aesthetic therapist with 8 years at luxury spas across London & Mumbai.',emoji:'👩'},
+  {name:'Arjun Mehta',specialty:'Hair Artistry',bio:'Award-winning stylist trained at Toni & Guy International.',emoji:'👨'},
+  {name:'Leila Hassan',specialty:'Body Rituals',bio:'Master bodywork therapist, specialist in Ayurvedic and Thai techniques.',emoji:'👩'},
+  {name:'Rohan Das',specialty:'Nail Atelier',bio:'Creative nail artist with over 5,000 bespoke designs to his portfolio.',emoji:'👨'},
+];
+
+const PRODUCTS = [
+  {id:1,name:'Gold Serum Elixir',category:'skin',price:'₹4,800',emoji:'✨',stock:24},
+  {id:2,name:'Repair Hair Masque',category:'hair',price:'₹2,200',emoji:'🧴',stock:15},
+  {id:3,name:'Rose Body Oil',category:'body',price:'₹3,600',emoji:'🌹',stock:30},
+  {id:4,name:'Cuticle Renewal Balm',category:'tools',price:'₹980',emoji:'💧',stock:50},
+  {id:5,name:'Charcoal Cleanser',category:'skin',price:'₹1,800',emoji:'🖤',stock:18},
+  {id:6,name:'Scalp Tonic Spray',category:'hair',price:'₹2,400',emoji:'🌿',stock:22},
+  {id:7,name:'Himalayan Salt Scrub',category:'body',price:'₹1,600',emoji:'🏔️',stock:35},
+  {id:8,name:'Luxury Jade Roller',category:'tools',price:'₹1,400',emoji:'🪨',stock:12},
+];
+
+const OFFERS = [
+  {title:'Summer Glow Package',discount:'30% OFF',desc:'On all facial treatments. Book online and save.', validity:'Valid till 31 Jul 2025',code:'GLOW30'},
+  {title:'Couples Ritual',discount:'₹5,000 OFF',desc:'Book any two treatments together and receive a luxury gift.', validity:'Valid till 15 Aug 2025',code:'COUPLE5K'},
+  {title:'First Visit Special',discount:'20% OFF',desc:'New clients receive 20% off their first treatment.',validity:'Always on',code:'FIRST20'},
+];
+
+const MEMBERSHIPS = [
+  {name:'Silver',price:'₹2,499',period:'mo',perks:['2 complimentary services/month','10% retail discount','Priority booking'],featured:false},
+  {name:'Gold',price:'₹4,999',period:'mo',perks:['5 complimentary services/month','20% retail discount','Priority booking','Free consultation','Monthly gift hamper'],featured:true},
+  {name:'Platinum',price:'₹9,999',period:'mo',perks:['Unlimited services','30% retail discount','Dedicated concierge','Exclusive events access','Quarterly luxury hamper','Free partner treatments'],featured:false},
+];
+
+const TESTIMONIALS = [
+  {text:'The Gold Leaf Ritual was an experience like no other. I floated out. AURUM is truly in a class of its own.',author:'Meera Kapoor',meta:'Gold Member · 2 years',avatar:'👩',stars:5},
+  {text:'My hair has never looked this good. Arjun understood exactly what I wanted without me saying a word. Pure artistry.',author:'James Thornton',meta:'Regular Client',avatar:'👨',stars:5},
+  {text:'The Himalayan Salt Journey was deeply restorative. The attention to detail is impeccable — every element considered.',author:'Aisha Rahman',meta:'Platinum Member',avatar:'👩',stars:5},
+];
+
+const JOURNAL = [
+  {title:'The Art of Scalp Care: A Complete Guide',cat:'Hair Care',date:'15 Jun 2025',emoji:'📖'},
+  {title:'Why Gold in Skincare Actually Works',cat:'Skin Science',date:'02 Jun 2025',emoji:'✨'},
+  {title:'Ritual vs Routine: The Philosophy of Beauty',cat:'Wellness',date:'28 May 2025',emoji:'🌿'},
+];
+
+// ========== STATE ==========
+const state = {
+  cart:[],
+  booking:{step:1,service:null,therapist:null,date:null,time:null},
+  chatOpen:false,
+};
+
+// ========== RENDER SERVICES ==========
+function renderServices(filter='all'){
+  const g=document.getElementById('services-grid');
+  const data=filter==='all'?SERVICES:SERVICES.filter(s=>s.category===filter);
+  g.innerHTML=data.map(s=>`
+    <div class="service-card reveal" onclick="openBooking()">
+      <div class="service-img-placeholder" style="width:100%;height:100%;background:linear-gradient(135deg,var(--surface) 0%,var(--surface-alt) 100%)">${s.emoji}</div>
+      <div class="service-card-overlay">
+        <div class="service-card-price">${s.price}</div>
+        <h3 class="h4" style="color:var(--text);font-family:'Cormorant Garamond',serif">${s.name}</h3>
+        <div class="service-card-duration">${s.duration} · ${s.desc}</div>
+      </div>
+    </div>
+  `).join('');
+  initReveal();
+}
+
+// ========== RENDER RITUALS ==========
+function renderRituals(){
+  document.getElementById('rituals-grid').innerHTML=RITUALS.map(r=>`
+    <div class="ritual-card reveal">
+      <div class="ritual-img"><div class="ritual-img-placeholder" style="background:linear-gradient(135deg,var(--surface-alt),var(--bg));width:100%;height:100%">${r.emoji}</div></div>
+      <div class="ritual-body">
+        <div class="ritual-meta">
+          <span class="badge badge-gold">${r.tag}</span>
+          <span style="font-size:13px;color:var(--muted)">${r.duration}</span>
+        </div>
+        <h3 class="h3" style="font-family:'Cormorant Garamond',serif">${r.name}</h3>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7">${r.desc}</p>
+        <div class="ritual-actions">
+          <button class="btn btn-primary" onclick="openBooking()">Book Ritual</button>
+          <span style="font-size:1.2rem;font-family:'Cormorant Garamond',serif;color:var(--gold);align-self:center">${r.price}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ========== RENDER THERAPISTS ==========
+function renderTherapists(){
+  document.getElementById('therapists-grid').innerHTML=THERAPISTS.map(t=>`
+    <div class="therapist-card reveal">
+      <div class="therapist-avatar">${t.emoji}</div>
+      <h4 class="h4" style="font-family:'Cormorant Garamond',serif">${t.name}</h4>
+      <div class="therapist-specialty">${t.specialty}</div>
+      <p class="therapist-bio">${t.bio}</p>
+      <button class="btn btn-outline w-full" onclick="openBooking()">Book Session</button>
+    </div>
+  `).join('');
+}
+
+// ========== RENDER PRODUCTS ==========
+function renderProducts(filter='all'){
+  const g=document.getElementById('products-grid');
+  const data=filter==='all'?PRODUCTS:PRODUCTS.filter(p=>p.category===filter);
+  g.innerHTML=data.map(p=>`
+    <div class="product-card reveal">
+      <div class="product-img"><div class="product-img-placeholder" style="width:100%;height:100%;background:linear-gradient(135deg,var(--surface-alt),var(--bg))">${p.emoji}</div></div>
+      <div class="product-body">
+        <h4 style="font-size:14px;font-weight:500">${p.name}</h4>
+        <div class="product-price">${p.price}</div>
+        <div class="product-actions">
+          <button class="add-cart-btn" onclick="addToCart(event,${p.id})">
+            <span>+ Cart</span>
+          </button>
+          <button class="wishlist-btn" onclick="showToast('Added to wishlist','info')">♡</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ========== RENDER OFFERS ==========
+function renderOffers(){
+  document.getElementById('offers-grid').innerHTML=OFFERS.map(o=>`
+    <div class="offer-card reveal">
+      <div class="offer-corner"></div>
+      <span class="ui-label" style="color:var(--gold)">${o.title}</span>
+      <div class="offer-badge">${o.discount}</div>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;margin:.75rem 0">${o.desc}</p>
+      <div class="offer-validity">${o.validity}</div>
+      <div style="margin-top:1.25rem;display:flex;align-items:center;gap:.75rem">
+        <code style="font-size:12px;background:var(--bg);border:1px solid var(--border);padding:.35rem .75rem;border-radius:var(--radius-sm);letter-spacing:.1em;color:var(--gold)">${o.code}</code>
+        <button class="btn btn-outline" style="padding:.45rem 1rem;font-size:12px" onclick="copyCode('${o.code}')">Copy</button>
+      </div>
+    </div>
+  `).join('');
+}
+function copyCode(c){navigator.clipboard?.writeText(c);showToast(`Code "${c}" copied!`,'success')}
+
+// ========== RENDER MEMBERSHIP ==========
+function renderMembership(){
+  document.getElementById('membership-grid').innerHTML=MEMBERSHIPS.map(m=>`
+    <div class="membership-card ${m.featured?'featured':''} reveal">
+      <div>
+        <span class="ui-label" style="color:var(--gold)">${m.name}</span>
+        <div class="membership-price"><sup>₹</sup>${m.price.replace('₹','')}<sub>/${m.period}</sub></div>
+      </div>
+      <div class="membership-perks">
+        ${m.perks.map(p=>`<div class="perk"><div class="perk-check">✓</div>${p}</div>`).join('')}
+      </div>
+      <button class="btn ${m.featured?'btn-primary':'btn-outline'} w-full" onclick="showToast('Redirecting to membership signup…','info')">Join ${m.name}</button>
+    </div>
+  `).join('');
+}
+
+// ========== RENDER TESTIMONIALS ==========
+function renderTestimonials(){
+  document.getElementById('testimonials-grid').innerHTML=TESTIMONIALS.map(t=>`
+    <div class="testimonial-card reveal">
+      <div class="stars">${'★'.repeat(t.stars)}</div>
+      <p class="testimonial-text">"${t.text}"</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">${t.avatar}</div>
+        <div><div class="testimonial-name">${t.author}</div><div class="testimonial-meta">${t.meta}</div></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ========== RENDER JOURNAL ==========
+function renderJournal(){
+  document.getElementById('journal-grid').innerHTML=JOURNAL.map(j=>`
+    <div class="journal-card reveal">
+      <div class="journal-img">${j.emoji}</div>
+      <div class="journal-body">
+        <div class="journal-cat">${j.cat}</div>
+        <h4 class="h4" style="font-family:'Cormorant Garamond',serif;line-height:1.3">${j.title}</h4>
+        <div class="journal-date">${j.date}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ========== INIT ALL ==========
+function initAll(){
+  renderServices();
+  renderRituals();
+  renderTherapists();
+  renderProducts();
+  renderOffers();
+  renderMembership();
+  renderTestimonials();
+  renderJournal();
+  initFilters();
+  initBookingContent();
+  initAdminTables();
+  initRevealObserver();
+  initHeader();
+  initCharts();
+  // Set min date for booking
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('booking-date').min=today;
+  document.getElementById('qb-date').min=today;
+}
+
+// ========== FILTERS =========
+function initFilters(){
+  document.querySelectorAll('[data-filter]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderServices(btn.dataset.filter);
+    });
+  });
+  document.querySelectorAll('[data-filter-shop]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('[data-filter-shop]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProducts(btn.dataset.filterShop);
+    });
+  });
+}
+
+// ========== HEADER SCROLL ==========
+function initHeader(){
+  const h=document.getElementById('header');
+  window.addEventListener('scroll',()=>{
+    h.classList.toggle('scrolled',window.scrollY>60);
+  },{passive:true});
+  document.getElementById('hamburger-btn').addEventListener('click',()=>{
+    document.getElementById('drawer').classList.add('open');
+  });
+}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open')}
+
+// ========== CART ==========
+function addToCart(e,productId){
+  const btn=e.currentTarget;
+  btn.classList.remove('bump');
+  void btn.offsetWidth;
+  btn.classList.add('bump');
+  const p=PRODUCTS.find(x=>x.id===productId);
+  if(!p)return;
+  const existing=state.cart.find(x=>x.id===productId);
+  if(existing)existing.qty++;
+  else state.cart.push({...p,qty:1});
+  updateCartUI();
+  showToast(`${p.name} added to cart`,'success');
+}
+function updateCartUI(){
+  const total=state.cart.reduce((a,i)=>a+i.qty,0);
+  document.getElementById('cart-count').textContent=total;
+  document.getElementById('cart-count-label').textContent=`${total} item${total!==1?'s':''}`;
+  const totalVal=state.cart.reduce((a,i)=>a+parseInt(i.price.replace(/[₹,]/g,''))*i.qty,0);
+  document.getElementById('cart-total').textContent=`₹${totalVal.toLocaleString('en-IN')}`;
+  const container=document.getElementById('cart-items-container');
+  if(state.cart.length===0){
+    container.innerHTML=`<div style="text-align:center;padding:3rem 1rem;color:var(--muted)"><div style="font-size:2.5rem;margin-bottom:1rem">🛍️</div><p style="font-size:14px">Your cart is empty</p></div>`;
+    return;
+  }
+  container.innerHTML=state.cart.map(item=>`
+    <div class="cart-item">
+      <div class="cart-item-img">${item.emoji}</div>
+      <div class="cart-item-body">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${item.price}</div>
+        <div class="cart-qty">
+          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <span class="qty-val">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+          <button style="margin-left:auto;font-size:.8rem;color:var(--error);background:none;cursor:pointer;border:none" onclick="removeCartItem(${item.id})">Remove</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function changeQty(id,delta){
+  const item=state.cart.find(x=>x.id===id);
+  if(!item)return;
+  item.qty+=delta;
+  if(item.qty<=0)state.cart=state.cart.filter(x=>x.id!==id);
+  updateCartUI();
+}
+function removeCartItem(id){state.cart=state.cart.filter(x=>x.id!==id);updateCartUI()}
+function openCart(){document.getElementById('cart-sidebar').classList.add('open');document.getElementById('cart-overlay').classList.add('open')}
+function closeCart(){document.getElementById('cart-sidebar').classList.remove('open');document.getElementById('cart-overlay').classList.remove('open')}
+document.getElementById('cart-btn').addEventListener('click',openCart);
+
+// ========== BOOKING ==========
+function initBookingContent(){
+  document.getElementById('booking-service-list').innerHTML=SERVICES.slice(0,6).map(s=>`
+    <div class="service-option" onclick="selectBookingService(${s.id},this)">
+      <div class="service-option-icon">${s.emoji}</div>
+      <div style="flex:1"><div style="font-size:14px;font-weight:500">${s.name}</div><div style="font-size:12px;color:var(--muted);margin-top:.2rem">${s.duration}</div></div>
+      <div style="color:var(--gold);font-size:14px">${s.price}</div>
+    </div>
+  `).join('');
+  document.getElementById('booking-therapist-list').innerHTML=THERAPISTS.map((t,i)=>`
+    <div class="service-option" onclick="selectBookingTherapist(${i},this)">
+      <div class="service-option-icon" style="font-size:1.4rem">${t.emoji}</div>
+      <div style="flex:1"><div style="font-size:14px;font-weight:500">${t.name}</div><div style="font-size:12px;color:var(--muted);margin-top:.2rem">${t.specialty}</div></div>
+    </div>
+  `).join('');
+  const times=['10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','12:30 PM','01:00 PM','01:30 PM','02:00 PM','02:30 PM','03:00 PM','03:30 PM','04:00 PM','04:30 PM','05:00 PM'];
+  const unavail=[2,5,9];
+  document.getElementById('booking-time-grid').innerHTML=times.map((t,i)=>`
+    <div class="time-slot ${unavail.includes(i)?'unavail':''}" onclick="selectTime('${t}',this)">${t}</div>
+  `).join('');
+}
+function selectBookingService(id,el){
+  document.querySelectorAll('#booking-service-list .service-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  state.booking.service=SERVICES.find(s=>s.id===id);
+}
+function selectBookingTherapist(idx,el){
+  document.querySelectorAll('#booking-therapist-list .service-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  state.booking.therapist=THERAPISTS[idx];
+}
+function selectTime(t,el){
+  document.querySelectorAll('.time-slot').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  state.booking.time=t;
+}
+function openBooking(){document.getElementById('booking-modal').classList.add('open');document.body.style.overflow='hidden';setBookingStep(1)}
+function closeBooking(){document.getElementById('booking-modal').classList.remove('open');document.body.style.overflow=''}
+const BOOKING_LABELS=['Choose a Service','Choose a Therapist','Select Date & Time','Confirm Booking'];
+function setBookingStep(n){
+  state.booking.step=n;
+  document.querySelectorAll('.step-content').forEach((el,i)=>{el.classList.toggle('active',i===n-1)});
+  [1,2,3,4].forEach(i=>{
+    const s=document.getElementById('bs-'+i);
+    s.classList.remove('active','done');
+    if(i<n)s.classList.add('done');
+    else if(i===n)s.classList.add('active');
+  });
+  document.getElementById('booking-step-label').textContent=`Step ${n} of 4 — ${BOOKING_LABELS[n-1]}`;
+  document.getElementById('booking-back').style.display=n>1?'':'none';
+  document.getElementById('booking-next').textContent=n<4?'Next →':'Confirm Booking';
+  if(n===4)renderBookingSummary();
+}
+function renderBookingSummary(){
+  const b=state.booking;
+  document.getElementById('booking-summary').innerHTML=`
+    <div class="confirm-row"><span class="confirm-label">Service</span><span class="confirm-val">${b.service?.name||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Therapist</span><span class="confirm-val">${b.therapist?.name||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Date</span><span class="confirm-val">${document.getElementById('booking-date').value||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Time</span><span class="confirm-val">${b.time||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Price</span><span class="confirm-val" style="color:var(--gold)">${b.service?.price||'—'}</span></div>
+  `;
+}
+function bookingNext(){
+  const {step,service,therapist,time}=state.booking;
+  if(step===1&&!service){showToast('Please select a service','error');return}
+  if(step===2&&!therapist){showToast('Please select a therapist','error');return}
+  if(step===3&&!document.getElementById('booking-date').value){showToast('Please select a date','error');return}
+  if(step===3&&!time){showToast('Please select a time slot','error');return}
+  if(step===4){
+    if(!document.getElementById('booking-name').value.trim()){showToast('Please enter your name','error');return}
+    closeBooking();
+    showToast('Appointment confirmed! Check your email for details.','success');
+    return;
+  }
+  setBookingStep(step+1);
+}
+function bookingBack(){if(state.booking.step>1)setBookingStep(state.booking.step-1)}
+
+// ========== QUICK BOOK ==========
+function handleQuickBook(){
+  const s=document.getElementById('qb-service').value;
+  const d=document.getElementById('qb-date').value;
+  if(!s||!d){showToast('Please select service and date','error');return}
+  openBooking();
+  showToast('Opening full booking form…','info');
+}
+
+// ========== CHAT ==========
+const BOT_REPLIES=['Happy to help! What treatment are you interested in?','We have availability tomorrow from 10 AM. Shall I help you book?','Our Gold Leaf Ritual is the perfect choice! Shall I check availability?','You can call us at +91 124 456 7890 or book online anytime.'];
+let botIdx=0;
+function toggleChat(){
+  state.chatOpen=!state.chatOpen;
+  document.getElementById('chat-panel').classList.toggle('open',state.chatOpen);
+  document.getElementById('chat-badge').style.display='none';
+}
+function sendChat(){
+  const input=document.getElementById('chat-input');
+  const msg=input.value.trim();
+  if(!msg)return;
+  const msgs=document.getElementById('chat-messages');
+  msgs.innerHTML+=`<div class="chat-msg user">${msg}</div>`;
+  input.value='';
+  msgs.scrollTop=msgs.scrollHeight;
+  setTimeout(()=>{
+    msgs.innerHTML+=`<div class="chat-msg bot">${BOT_REPLIES[botIdx%BOT_REPLIES.length]}</div>`;
+    botIdx++;
+    msgs.scrollTop=msgs.scrollHeight;
+  },800);
+}
+
+// ========== TOAST ==========
+function showToast(msg,type='info'){
+  const icons={success:'✓',error:'✕',info:'✦'};
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<span class="toast-icon">${icons[type]||'✦'}</span><span class="toast-text">${msg}</span><span class="toast-close" onclick="this.parentElement.remove()">✕</span>`;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(()=>{t.classList.add('exit');setTimeout(()=>t.remove(),350)},3800);
+}
+
+// ========== REVEAL ==========
+let revealObserver;
+function initRevealObserver(){
+  if(revealObserver)revealObserver.disconnect();
+  revealObserver=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
+  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>revealObserver.observe(el));
+}
+function initReveal(){
+  document.querySelectorAll('.reveal:not(.in),.reveal-left:not(.in),.reveal-right:not(.in)').forEach(el=>revealObserver?.observe(el));
+}
+
+// ========== ADMIN ==========
+function openAdmin(){document.getElementById('admin-panel').classList.add('open');document.body.style.overflow='hidden'}
+function closeAdmin(){document.getElementById('admin-panel').classList.remove('open');document.body.style.overflow=''}
+function switchAdmin(page,el){
+  document.querySelectorAll('.admin-link').forEach(l=>l.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.admin-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('admin-title').textContent=el.textContent.trim();
+}
+function initAdminTables(){
+  // Recent appts
+  const apptData=[
+    {id:'#A1042',client:'Meera Kapoor',service:'Gold Leaf Ritual',therapist:'Priya Sharma',time:'10:00 AM',status:'Confirmed',amount:'₹12,000'},
+    {id:'#A1041',client:'James T.',service:'Hair Couture',therapist:'Arjun Mehta',time:'11:30 AM',status:'In Progress',amount:'₹4,500'},
+    {id:'#A1040',client:'Aisha R.',service:'Hot Stone Massage',therapist:'Leila Hassan',time:'01:00 PM',status:'Completed',amount:'₹5,800'},
+    {id:'#A1039',client:'Rohan M.',service:'Nail Artistry',therapist:'Rohan Das',time:'02:30 PM',status:'Cancelled',amount:'₹1,800'},
+    {id:'#A1038',client:'Priya S.',service:'Body Polish',therapist:'Leila Hassan',time:'04:00 PM',status:'Confirmed',amount:'₹3,900'},
+  ];
+  const statusColors={Confirmed:'badge-gold','In Progress':'badge-success',Completed:'badge-success',Cancelled:'badge-error'};
+  const apptHTML=`<thead><tr>${['ID','Client','Service','Therapist','Time','Status','Amount','Actions'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${apptData.map(a=>`<tr><td style="color:var(--muted)">${a.id}</td><td>${a.client}</td><td>${a.service}</td><td>${a.therapist}</td><td>${a.time}</td><td><span class="badge ${statusColors[a.status]||'badge-gold'}">${a.status}</span></td><td style="color:var(--gold)">${a.amount}</td><td style="display:flex;gap:.5rem"><button class="btn btn-ghost" style="font-size:11px;padding:.3rem .6rem" onclick="showToast('Edit appointment','info')">Edit</button></td></tr>`).join('')}</tbody>`;
+  const t=document.getElementById('recent-appts-table');
+  if(t)t.innerHTML=apptHTML;
+  const t2=document.getElementById('appts-table');
+  if(t2)t2.innerHTML=apptHTML;
+  // Services table
+  const svcHTML=`<thead><tr>${['ID','Name','Category','Duration','Price','Status','Actions'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${SERVICES.map(s=>`<tr><td style="color:var(--muted)">#S${s.id.toString().padStart(3,'0')}</td><td>${s.name}</td><td><span class="badge badge-gold">${s.category}</span></td><td>${s.duration}</td><td style="color:var(--gold)">${s.price}</td><td><span class="badge badge-success">Active</span></td><td style="display:flex;gap:.5rem"><button class="btn btn-ghost" style="font-size:11px;padding:.3rem .6rem" onclick="showToast('Edit service','info')">Edit</button><button class="btn btn-ghost" style="font-size:11px;padding:.3rem .6rem;color:var(--error)" onclick="showToast('Service removed','error')">Delete</button></td></tr>`).join('')}</tbody>`;
+  const st=document.getElementById('services-table');
+  if(st)st.innerHTML=svcHTML;
+  // Products table
+  const pHTML=`<thead><tr>${['ID','Product','Category','Price','Stock','Actions'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${PRODUCTS.map(p=>`<tr><td style="color:var(--muted)">#P${p.id.toString().padStart(3,'0')}</td><td>${p.emoji} ${p.name}</td><td><span class="badge badge-gold">${p.category}</span></td><td style="color:var(--gold)">${p.price}</td><td><span class="badge ${p.stock<15?'badge-error':'badge-success'}">${p.stock}</span></td><td style="display:flex;gap:.5rem"><button class="btn btn-ghost" style="font-size:11px;padding:.3rem .6rem" onclick="showToast('Edit product','info')">Edit</button><button class="btn btn-ghost" style="font-size:11px;padding:.3rem .6rem;color:var(--error)" onclick="showToast('Product removed','error')">Delete</button></td></tr>`).join('')}</tbody>`;
+  const pt=document.getElementById('products-table');
+  if(pt)pt.innerHTML=pHTML;
+  // Offers table
+  const oHTML=`<thead><tr>${['Title','Discount','Code','Validity','Actions'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${OFFERS.map(o=>`<tr><td>${o.title}</td><td style="color:var(--gold)">${o.discount}</td><td><code style="font-size:12px;background:var(--bg);border:1px solid var(--border);padding:.2rem .5rem;border-radius:var(--radius-sm);letter-spacing:.1em;color:var(--gold)">${o.code}</code></td><td style="color:var(--muted)">${o.validity}</td><td style="display:flex;gap:.5rem"><button class="btn btn-ghost" style="font-size:11px;padding:.3rem .6rem" onclick="showToast('Edit offer','info')">Edit</button></td></tr>`).join('')}</tbody>`;
+  const ot=document.getElementById('offers-table');
+  if(ot)ot.innerHTML=oHTML;
+  // Users table
+  const users=[
+    {name:'Meera Kapoor',email:'meera@example.com',role:'Client',plan:'Gold',visits:14,spent:'₹1.4L'},
+    {name:'James Thornton',email:'james@example.com',role:'Client',plan:'Silver',visits:8,spent:'₹62,000'},
+    {name:'Aisha Rahman',email:'aisha@example.com',role:'Client',plan:'Platinum',visits:22,spent:'₹3.2L'},
+    {name:'Priya Sharma',email:'priya@aurumstudio.in',role:'Therapist',plan:'Staff',visits:'-',spent:'-'},
+    {name:'Arjun Mehta',email:'arjun@aurumstudio.in',role:'Therapist',plan:'Staff',visits:'-',spent:'-'},
+  ];
+  const uHTML=`<thead><tr>${['Name','Email','Role','Plan','Visits','Total Spent','Actions'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${users.map(u=>`<tr><td>${u.name}</td><td style="color:var(--muted)">${u.email}</td><td><span class="badge ${u.role==='Therapist'?'badge-gold':'badge-success'}">${u.role}</span></td><td>${u.plan}</td><td>${u.visits}</td><td style="color:var(--gold)">${u.spent}</td><td><button class="btn btn-ghost" style="font-size:11px;padding:.3rem .6rem" onclick="showToast('Edit user','info')">Edit</button></td></tr>`).join('')}</tbody>`;
+  const ut=document.getElementById('users-table');
+  if(ut)ut.innerHTML=uHTML;
+  // Billing table
+  const bills=[
+    {id:'#INV2024',client:'Meera Kapoor',service:'Gold Leaf Ritual',amount:'₹12,000',date:'15 Jun 2025',method:'Card',status:'Paid'},
+    {id:'#INV2023',client:'James T.',service:'Hair Couture',amount:'₹4,500',date:'14 Jun 2025',method:'UPI',status:'Paid'},
+    {id:'#INV2022',client:'Aisha R.',service:'Hot Stone Massage',amount:'₹5,800',date:'13 Jun 2025',method:'Cash',status:'Paid'},
+    {id:'#INV2021',client:'New Client',service:'Bridal Package',amount:'₹28,000',date:'12 Jun 2025',method:'Pending',status:'Pending'},
+  ];
+  const bHTML=`<thead><tr>${['Invoice','Client','Service','Amount','Date','Method','Status'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${bills.map(b=>`<tr><td style="color:var(--muted)">${b.id}</td><td>${b.client}</td><td>${b.service}</td><td style="color:var(--gold)">${b.amount}</td><td>${b.date}</td><td>${b.method}</td><td><span class="badge ${b.status==='Paid'?'badge-success':'badge-error'}">${b.status}</span></td></tr>`).join('')}</tbody>`;
+  const bt=document.getElementById('billing-table');
+  if(bt)bt.innerHTML=bHTML;
+  // Top services list
+  const top=[{name:'Signature Facial',pct:72},{name:'Hair Couture',pct:58},{name:'Body Polish',pct:45},{name:'Nail Artistry',pct:37}];
+  const tsl=document.getElementById('top-services-list');
+  if(tsl)tsl.innerHTML=top.map(s=>`<div style="margin-bottom:.875rem"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:.35rem"><span>${s.name}</span><span style="color:var(--gold)">${s.pct}%</span></div><div style="height:4px;background:var(--border);border-radius:999px"><div style="height:100%;width:${s.pct}%;background:var(--gold);border-radius:999px;transition:width 1s ease"></div></div></div>`).join('');
+}
+function filterUsers(q){
+  const rows=document.querySelectorAll('#users-table tbody tr');
+  rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none'});
+}
+
+// ========== MINI CHARTS ==========
+function initCharts(){
+  const weekly=[40,65,55,80,72,90,60];
+  const rc=document.getElementById('revenue-chart');
+  if(rc){const max=Math.max(...weekly);rc.innerHTML=weekly.map(v=>`<div class="mini-bar" style="height:${(v/max)*100}%"></div>`).join('')}
+  const monthly=[30,45,38,60,72,55,80,90,75,85,70,95];
+  const mc=document.getElementById('monthly-chart');
+  if(mc){const max=Math.max(...monthly);mc.innerHTML=monthly.map(v=>`<div class="mini-bar" style="height:${(v/max)*100}%"></div>`).join('')}
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded',()=>{
+  initAll();
+  // Show initial toast
+  setTimeout(()=>showToast('Welcome to AURUM — Luxury Redefined 🌿','info'),1200);
+});
+</script>
+</body>
+</html>
